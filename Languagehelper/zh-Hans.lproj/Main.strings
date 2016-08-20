@@ -1,0 +1,63 @@
+
+/* Class = "UIButton"; normalTitle = "Translate"; ObjectID = "33P-ul-Irc"; */
+"33P-ul-Irc.normalTitle" = "翻译";
+
+/* Class = "UIButton"; normalTitle = "Chinese"; ObjectID = "8Lk-7i-n7T"; */
+"8Lk-7i-n7T.normalTitle" = "普通话";
+
+/* Class = "UIButton"; selectedTitle = "Chinese"; ObjectID = "8Lk-7i-n7T"; */
+"8Lk-7i-n7T.selectedTitle" = "普通话";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Kj9-r6-RLQ"; */
+"Kj9-r6-RLQ.text" = "";
+
+/* Class = "UIButton"; normalTitle = "Clear all record except collected"; ObjectID = "O8t-xr-uZN"; */
+"O8t-xr-uZN.normalTitle" = "清除收藏之外的所有记录";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Tuf-An-JWu"; */
+"Tuf-An-JWu.text" = "";
+
+/* Class = "UILabel"; text = "Auto play after Translate"; ObjectID = "aXD-gH-41F"; */
+"aXD-gH-41F.text" = "翻译之后自动播放";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "cwq-Tp-qn9"; */
+"cwq-Tp-qn9.text" = "";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "dJX-4S-EvH"; */
+"dJX-4S-EvH.text" = "";
+
+/* Class = "UIButton"; normalTitle = "Clear all record"; ObjectID = "eoz-Rb-vpG"; */
+"eoz-Rb-vpG.normalTitle" = "清除所有记录";
+
+/* Class = "UINavigationItem"; title = "Setting"; ObjectID = "iF2-bv-3Ws"; */
+"iF2-bv-3Ws.title" = "设置";
+
+/* Class = "UINavigationItem"; title = "Translator"; ObjectID = "kMD-a8-7VE"; */
+"kMD-a8-7VE.title" = "中英互译@";
+
+/* Class = "UILabel"; text = "Auto clear after Translate"; ObjectID = "mSq-U8-SCR"; */
+"mSq-U8-SCR.text" = "退出应用即清除收藏之外所有记录";
+
+/* Class = "UIBarButtonItem"; title = "Back"; ObjectID = "ofZ-Mi-5bS"; */
+"ofZ-Mi-5bS.title" = "Back";
+
+/* Class = "UIButton"; normalTitle = "Translate"; ObjectID = "qVS-ND-Aac"; */
+"qVS-ND-Aac.normalTitle" = "翻译";
+
+/* Class = "UIButton"; normalTitle = "Chinese"; ObjectID = "wAh-x5-PFv"; */
+"wAh-x5-PFv.normalTitle" = "普通话";
+
+/* Class = "UIButton"; selectedTitle = "Chinese"; ObjectID = "wAh-x5-PFv"; */
+"wAh-x5-PFv.selectedTitle" = "普通话";
+
+/* Class = "UIButton"; normalTitle = "English"; ObjectID = "wN0-Ms-qgj"; */
+"wN0-Ms-qgj.normalTitle" = "英语";
+
+/* Class = "UIButton"; selectedTitle = "English"; ObjectID = "wN0-Ms-qgj"; */
+"wN0-Ms-qgj.selectedTitle" = "英语";
+
+/* Class = "UIButton"; normalTitle = "English"; ObjectID = "zsF-sn-45l"; */
+"zsF-sn-45l.normalTitle" = "英语";
+
+/* Class = "UIButton"; selectedTitle = "English"; ObjectID = "zsF-sn-45l"; */
+"zsF-sn-45l.selectedTitle" = "英语";

@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  Languagehelper
+
+  Created by luli on 16/6/19.
+  Copyright © 2016年 luli. All rights reserved.
+*/
+"Translate" = "翻译";
+"Dictionary" = "词典";
+"Please input Chinese or English" = "请输入需要翻译的中文或英文";
+"Translate fail,please retry later!" = "翻译失败，请稍后重试！";
+"Finish" = "完成";
+"copy success" = "复制成功，去粘贴吧";
+"kindly reminder" = "温馨提示";
+"Are you sure to delete" = "确定要删除吗";
+"No" = "取消";
+"Yes" = "确定";
+"delete success!" = "删除成功";
