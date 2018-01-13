@@ -13,12 +13,12 @@ class Utile {
     static let bd_appid = "20151111000005006"
     static let bd_secretkey = "91mGcsmdvX9HAaE8tXoI"
     
-    class func getBaiduTranslateSign(salt:String, question:String) -> String{
+    class func getBaiduTranslateSign(_ salt:String, question:String) -> String{
         let str = bd_appid + question + salt + bd_secretkey
         return str.md5
     }
 
-    class func isChinese(data:String) -> Bool{
+    class func isChinese(_ data:String) -> Bool{
         print("isChinese:\(data)")
         if data.containsChineseCharacters {
             print("Contains Chinese")
@@ -33,16 +33,16 @@ class Utile {
 
 extension String {
     var containsChineseCharacters: Bool {
-        return self.rangeOfString("\\p{Han}", options: .RegularExpressionSearch) != nil
+        return self.range(of: "\\p{Han}", options: .regularExpression) != nil
     }
 }
 
 extension String {
     var md5 : String{
-        let str = self.cStringUsingEncoding(NSUTF8StringEncoding)
-        let strLen = CC_LONG(self.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let str = self.cString(using: String.Encoding.utf8)
+        let strLen = CC_LONG(self.lengthOfBytes(using: String.Encoding.utf8))
         let digestLen = Int(CC_MD5_DIGEST_LENGTH)
-        let result = UnsafeMutablePointer<CUnsignedChar>.alloc(digestLen);
+        let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen);
         
         CC_MD5(str!, strLen, result);
         
@@ -50,7 +50,7 @@ extension String {
         for i in 0 ..< digestLen {
             hash.appendFormat("%02x", result[i]);
         }
-        result.destroy();
+        result.deinitialize();
         
         return String(format: hash as String)
     }

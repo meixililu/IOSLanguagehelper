@@ -16,22 +16,19 @@ class SettingController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let autoPlay = NSUserDefaults.standardUserDefaults().boolForKey(KeyUtile.autoPlay)
+        let autoPlay = UserDefaults.standard.bool(forKey: KeyUtile.autoPlay)
         sw_auto_play.setOn(autoPlay, animated: true)
         
     }
-    @IBAction func onAutoPlaySwitchChange(sender: AnyObject) {
-        FileManager.saveUserDefaults(sender.on, key: KeyUtile.autoPlay)
+    @IBAction func onAutoPlaySwitchChange(_ sender: AnyObject) {
+        FileManagerUtil.saveUserDefaults(sender.isOn, key: KeyUtile.autoPlay)
     }
 
-    @IBAction func onAutoClearSwitchChange(sender: AnyObject) {
-        FileManager.saveUserDefaults(sender.on, key: KeyUtile.autoClear)
-    }
     
-    @IBAction func clear_all_record(sender: AnyObject) {
-        let alertController = UIAlertController(title: NSLocalizedString("kindly reminder", comment: "kindly reminder"),message: NSLocalizedString("Are you sure to delete", comment: "delete prompt"), preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: NSLocalizedString("No", comment: "No"), style: .Cancel, handler: nil)
-        let okAction = UIAlertAction(title: NSLocalizedString("Yes", comment: "Yes"), style: .Default,handler: {action in
+    @IBAction func clear_all_record(_ sender: AnyObject) {
+        let alertController = UIAlertController(title: NSLocalizedString("kindly reminder", comment: "kindly reminder"),message: NSLocalizedString("Are you sure to delete", comment: "delete prompt"), preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("No", comment: "No"), style: .cancel, handler: nil)
+        let okAction = UIAlertAction(title: NSLocalizedString("Yes", comment: "Yes"), style: .default,handler: {action in
             
             let translates = self.realm.objects(TranslateResultModel.self)
             let dics = self.realm.objects(DictionaryResultModel.self)
@@ -44,13 +41,13 @@ class SettingController: UIViewController {
         })
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
-    @IBAction func clear_uncollected_record(sender: AnyObject) {
-        let alertController = UIAlertController(title: NSLocalizedString("kindly reminder", comment: "kindly reminder"),message: NSLocalizedString("Are you sure to delete", comment: "delete prompt"), preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: NSLocalizedString("No", comment: "No"), style: .Cancel, handler: nil)
-        let okAction = UIAlertAction(title: NSLocalizedString("Yes", comment: "Yes"), style: .Default,handler: {action in
+    @IBAction func clear_uncollected_record(_ sender: AnyObject) {
+        let alertController = UIAlertController(title: NSLocalizedString("kindly reminder", comment: "kindly reminder"),message: NSLocalizedString("Are you sure to delete", comment: "delete prompt"), preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("No", comment: "No"), style: .cancel, handler: nil)
+        let okAction = UIAlertAction(title: NSLocalizedString("Yes", comment: "Yes"), style: .default,handler: {action in
             let translates = self.realm.objects(TranslateResultModel.self).filter("iscollected=''")
             let dics = self.realm.objects(DictionaryResultModel.self).filter("iscollected=''")
             try! self.realm.write {
@@ -61,7 +58,7 @@ class SettingController: UIViewController {
         })
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {

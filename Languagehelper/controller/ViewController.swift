@@ -26,9 +26,10 @@ class ViewController: UIViewController {
 //        let swiftPagesView : SwiftPages!
 //        swiftPagesView = SwiftPages(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
         // Initiation
-        let VCIDs = ["FirstVC", "SecondVC"]
+        let VCIDs = ["FirstVC", "SecondVC", "StudyVC"]
         let buttonTitles = [NSLocalizedString("Translate", comment: "translate"),
-                            NSLocalizedString("Dictionary", comment: "dictionary")]
+                            NSLocalizedString("Dictionary", comment: "dictionary"),
+                            NSLocalizedString("Study", comment: "study")]
         
         // Sample customization
         swiftPaagesView.setOriginY(0.0)
@@ -36,16 +37,16 @@ class ViewController: UIViewController {
         swiftPaagesView.setTopBarBackground(UIColor(hexString: ColorUtil.appBlue)!)
         swiftPaagesView.setButtonsTextColor(UIColor(hexString: ColorUtil.appBlue)!)
         swiftPaagesView.setAnimatedBarColor(UIColor(hexString: ColorUtil.appBlue)!)
-        swiftPaagesView.setButtonsTextFontAndSize(UIFont.systemFontOfSize(CGFloat.init(14)))
+        swiftPaagesView.setButtonsTextFontAndSize(UIFont.systemFont(ofSize: CGFloat.init(14)))
         swiftPaagesView.initializeWithVCIDsArrayAndButtonTitlesArray(VCIDs, buttonTitlesArray: buttonTitles)
     }
     
-    override func viewDidAppear(animated: Bool) {
-        swiftPaagesView.setViewdidAppear()
+    override func viewDidAppear(_ animated: Bool) {
+//        swiftPaagesView.setViewdidAppear()
     }
     
-    override func viewDidDisappear(animated: Bool) {
-        swiftPaagesView.setViewdidDisappear()
+    override func viewDidDisappear(_ animated: Bool) {
+//        swiftPaagesView.setViewdidDisappear()
     }
     
 

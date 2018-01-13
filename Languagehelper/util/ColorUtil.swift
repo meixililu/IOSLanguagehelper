@@ -22,12 +22,12 @@ class ColorUtil{
     
     static var darkGray3: String = "#333333"
     
-    class func getImageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0, 0, 1, 1)
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), false, 0)
+    class func getImageWithColor(_ color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), false, 0)
         color.setFill()
         UIRectFill(rect)
-        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return image
     }
