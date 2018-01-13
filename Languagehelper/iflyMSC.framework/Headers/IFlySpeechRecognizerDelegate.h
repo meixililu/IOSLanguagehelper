@@ -36,7 +36,7 @@ typedef void(^IFlyOnBuildFinishCompletionHandler)(NSString* grammarId,IFlySpeech
  *
  *  @param errorCode 错误描述
  */
-- (void) onError:(IFlySpeechError *) errorCode;
+- (void) onIFlyError:(IFlySpeechError *) errorCode;
 
 /*!
  *  识别结果回调
