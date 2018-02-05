@@ -8,56 +8,210 @@
 
 import UIKit
 import LeanCloud
+import Kingfisher
+import AVFoundation
+import KTVHTTPCache
+import MJRefresh
+import XLPagerTabStrip
 
-class StudyController: UIViewController {
+class StudyController: UIViewController, UITableViewDataSource, UITableViewDelegate, IndicatorInfoProvider{
 
+    var itemInfo: IndicatorInfo = IndicatorInfo(title: NSLocalizedString("Read", comment: "read"))
     @IBOutlet weak var tableview: UITableView!
+    var newsList = Array<LCObject>()
+    var player: AVPlayer?
+    let header = MJRefreshNormalHeader()
+    let footer = MJRefreshAutoNormalFooter()
+    var limit = 15
+    var skip = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print("study-viewDidLoad")
+        tableview.delegate = self
+        tableview.dataSource = self
+        tableview.rowHeight = UITableViewAutomaticDimension
+        tableview.estimatedRowHeight = 60
+        tableview.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10)
+        tableview.separatorColor = UIColor(hexString: ColorUtil.line_light_gray, alpha: 0.7)
+        header.setRefreshingTarget(self, refreshingAction: #selector(headerRefresh))
+        self.tableview.mj_header = header
+        footer.setRefreshingTarget(self, refreshingAction: #selector(footerRefresh))
+        self.tableview.mj_footer = footer
+        
         getDataTask();
-        // Do any additional setup after loading the view.
     }
     
+    func headerRefresh(){
+        print("headerRefresh")
+        skip = 0
+        getDataTask()
+    }
+    func footerRefresh(){
+        print("footerRefresh")
+        getDataTask()
+    }
+
     func getDataTask(){
-        let query = LCQuery(className: "Reading")
-        query.whereKey("createdAt", .descending)
-        query.limit = 10
-        query.skip = 20
-//        query.whereKey("priority", .equalTo(0))
-//        query.whereKey("priority", .equalTo(1))
-        
-        // 如果这样写，第二个条件将覆盖第一个条件，查询只会返回 priority = 1 的结果
-        query.find { result in
+        let query = LCQuery(className: AVUtil.Reading.Reading)
+        query.whereKey(AVUtil.Reading.publish_time, .descending)
+        query.limit = limit
+        query.skip = self.skip * limit
+           query.find { result in
             switch result {
             case .success(let objects):
-                print("查询成功")
-                for object in objects{
-                    let title: String = (object.get("title")?.stringValue)!
-                    print( title )
+                if self.skip == 0 {
+                    self.newsList.removeAll()
                 }
-                break // 查询成功
+                for obg in objects{
+                    obg.set(AVUtil.Reading.color_str, value: ColorUtil.getRandomColorStr())
+                }
+                self.newsList.append(contentsOf: objects)
+                self.tableview.reloadData()
+                self.skip = self.skip + 1
+                print(self.skip)
+                print(self.newsList.count)
+                self.tableview.mj_footer.endRefreshing()
+                self.tableview.mj_header.endRefreshing()
+                break
             case .failure(let error):
+                self.tableview.mj_footer.endRefreshing()
+                self.tableview.mj_header.endRefreshing()
                 print(error)
+                break
             }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("didEndDisplaying:"+indexPath.description)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("willDisplay:"+indexPath.description)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("didSelectRowAt:"+indexPath.description)
+        self.tableview!.deselectRow(at: indexPath, animated: true)
+        let detailViewController = storyboard?.instantiateViewController(withIdentifier: "ReadingDetailController")
+//        self.navigationController!.pushViewController(detailViewController!, animated: true)
+        self.navigationController!.present(detailViewController!, animated: true, completion: nil)
+//        self.present(detailViewController!, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.newsList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "newscell", for: indexPath as IndexPath) as! ReadingTableViewCell
+        cell.title.text = (self.newsList[indexPath.row].get(AVUtil.Reading.title)?.stringValue)!
+        let source = (self.newsList[indexPath.row].get(AVUtil.Reading.source_name)?.stringValue)!
+        let type_name = (self.newsList[indexPath.row].get(AVUtil.Reading.type_name)?.stringValue)!
+        if source.isEmpty {
+            cell.source.text = type_name
+        }else{
+            cell.source.text = source + "       " + type_name
+        }
+        
+        let url_str = (self.newsList[indexPath.row].get(AVUtil.Reading.img_url)?.stringValue)!
+        let color_str = (self.newsList[indexPath.row].get(AVUtil.Reading.color_str)?.stringValue)!
+        cell.img.backgroundColor = ColorUtil.getRandomColorByStr(colorStr: color_str)
+        let url = URL(string: url_str)
+        cell.img.kf.setImage(with: url)
+        
+        let type = (self.newsList[indexPath.row].get(AVUtil.Reading.type)?.stringValue)!
+        if type == "mp3"{
+            cell.img_width.constant = CGFloat(90)
+            cell.play_img.isHidden = false
+            if let state = self.newsList[indexPath.row].get(AVUtil.Reading.play_status),
+                state.stringValue == "1" {
+                cell.play_img.image = UIImage(named:"jz_pause_normal")
+            }else{
+                cell.play_img.image = UIImage(named:"jz_play_normal")
+            }
+        }else if type == "video" {
+            cell.play_img.isHidden = true
+            cell.img_width.constant = CGFloat(0)
+        }else{
+            cell.play_img.isHidden = true
+            cell.img_width.constant = CGFloat(90)
+        }
+        let tap_share:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StudyController.play_img_click(sender:)))
+        cell.play_img.tag = indexPath.row
+        cell.play_img.isUserInteractionEnabled = true
+        cell.play_img.addGestureRecognizer(tap_share)
+        
+        cell.setNeedsUpdateConstraints()
+        cell.updateConstraintsIfNeeded()
+        return cell
+    }
+    
+    func play_img_click(sender:UITapGestureRecognizer){
+        let img = sender.view as! UIImageView
+        let mp3Url = (self.newsList[img.tag].get(AVUtil.Reading.media_url)?.stringValue)!
+        if (player != nil),(player?.isPlaying)!{
+            if let status = self.newsList[img.tag].get(AVUtil.Reading.play_status),
+            status.stringValue == "1" {
+                player?.pause()
+                self.newsList[img.tag].set(AVUtil.Reading.play_status, value: "3")
+                self.tableview.reloadData()
+            }else{
+                clearPlaySign()
+                self.newsList[img.tag].set(AVUtil.Reading.play_status, value: "1")
+                playMp3(mp3_url: mp3Url)
+            }
+        }else{
+            if let status = self.newsList[img.tag].get(AVUtil.Reading.play_status),
+                status.stringValue == "3",(player != nil) {
+                player!.play()
+                self.newsList[img.tag].set(AVUtil.Reading.play_status, value: "1")
+                self.tableview.reloadData()
+            }else{
+                self.newsList[img.tag].set(AVUtil.Reading.play_status, value: "1")
+                playMp3(mp3_url: mp3Url)
+            }
+        }
+    }
+    
+    func playMp3(mp3_url: String) -> Void {
+        print(mp3_url)
+        let url_string = KTVHTTPCache.proxyURLString(withOriginalURLString: mp3_url)
+        let Mp3Url = URL(string: url_string!)
+        player = AVPlayer(url: Mp3Url!)
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(playerDidFinishPlaying),
+            name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+            object: player?.currentItem)
+        player!.play()
+        self.tableview.reloadData()
+    }
+    
+    func playerDidFinishPlaying(note: NSNotification) {
+        print("Video Finished")
+        clearPlaySign()
+        self.tableview.reloadData()
+    }
+
+    func clearPlaySign(){
+        for object in self.newsList{
+            object.set(AVUtil.Reading.play_status, value: "0")
         }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        return itemInfo
     }
-    */
+    
+}
 
+extension AVPlayer {
+    var isPlaying: Bool {
+        return rate != 0 && error == nil
+    }
 }

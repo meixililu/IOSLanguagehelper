@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import RealmSwift
 import LeanCloud
+import KTVHTTPCache
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,6 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         LeanCloud.initialize(applicationID: "3fg5ql3r45i3apx2is4j9on5q5rf6kapxce51t5bc0ffw2y4", applicationKey: "twhlgs6nvdt7z7sfaw76ujbmaw7l12gb8v6sdyjw1nzk9b1a")
         IFlySetting.setLogFile(LOG_LEVEL.LVL_ALL);
         IFlySetting.showLogcat(true);
+        
+        var error: NSError?
+        KTVHTTPCache.proxyStart(&error)
+        
         Thread.sleep(forTimeInterval: 1.0)
         return true
     }

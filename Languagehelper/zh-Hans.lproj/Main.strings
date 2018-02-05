@@ -3,10 +3,10 @@
 "33P-ul-Irc.normalTitle" = "翻译";
 
 /* Class = "UIButton"; normalTitle = "Chinese"; ObjectID = "8Lk-7i-n7T"; */
-"8Lk-7i-n7T.normalTitle" = "普通话";
+"8Lk-7i-n7T.normalTitle" = "中";
 
 /* Class = "UIButton"; selectedTitle = "Chinese"; ObjectID = "8Lk-7i-n7T"; */
-"8Lk-7i-n7T.selectedTitle" = "普通话";
+"8Lk-7i-n7T.selectedTitle" = "中";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "Kj9-r6-RLQ"; */
 "Kj9-r6-RLQ.text" = "";
@@ -45,19 +45,19 @@
 "qVS-ND-Aac.normalTitle" = "翻译";
 
 /* Class = "UIButton"; normalTitle = "Chinese"; ObjectID = "wAh-x5-PFv"; */
-"wAh-x5-PFv.normalTitle" = "普通话";
+"wAh-x5-PFv.normalTitle" = "中";
 
 /* Class = "UIButton"; selectedTitle = "Chinese"; ObjectID = "wAh-x5-PFv"; */
-"wAh-x5-PFv.selectedTitle" = "普通话";
+"wAh-x5-PFv.selectedTitle" = "中";
 
 /* Class = "UIButton"; normalTitle = "English"; ObjectID = "wN0-Ms-qgj"; */
-"wN0-Ms-qgj.normalTitle" = "英语";
+"wN0-Ms-qgj.normalTitle" = "英";
 
 /* Class = "UIButton"; selectedTitle = "English"; ObjectID = "wN0-Ms-qgj"; */
-"wN0-Ms-qgj.selectedTitle" = "英语";
+"wN0-Ms-qgj.selectedTitle" = "英";
 
 /* Class = "UIButton"; normalTitle = "English"; ObjectID = "zsF-sn-45l"; */
-"zsF-sn-45l.normalTitle" = "英语";
+"zsF-sn-45l.normalTitle" = "英";
 
 /* Class = "UIButton"; selectedTitle = "English"; ObjectID = "zsF-sn-45l"; */
-"zsF-sn-45l.selectedTitle" = "英语";
+"zsF-sn-45l.selectedTitle" = "英";

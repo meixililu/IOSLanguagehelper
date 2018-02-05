@@ -18,8 +18,8 @@ class SettingController: UIViewController {
         super.viewDidLoad()
         let autoPlay = UserDefaults.standard.bool(forKey: KeyUtile.autoPlay)
         sw_auto_play.setOn(autoPlay, animated: true)
-        
     }
+    
     @IBAction func onAutoPlaySwitchChange(_ sender: AnyObject) {
         FileManagerUtil.saveUserDefaults(sender.isOn, key: KeyUtile.autoPlay)
     }

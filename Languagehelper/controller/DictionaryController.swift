@@ -10,9 +10,12 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import RealmSwift
+import AVFoundation
+import XLPagerTabStrip
 
-class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFlySpeechRecognizerDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, AVAudioPlayerDelegate {
+class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFlySpeechRecognizerDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, AVAudioPlayerDelegate, IndicatorInfoProvider {
     
+    var itemInfo: IndicatorInfo = IndicatorInfo(title: NSLocalizedString("Dictionary", comment: "dictionary"))
     let realm = try! Realm()
     var translates = try! Realm().objects(DictionaryResultModel.self).sorted(byProperty: "creatTime",ascending: false )
     let headers: HTTPHeaders = [
@@ -55,6 +58,7 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         print("dic-viewDidLoad")
         img_voice.isHidden = true
         ed_input.delegate = self
@@ -68,6 +72,8 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
         btn_speak.layer.cornerRadius = 30.0
         btn_speak.layer.borderWidth = 5.0
         btn_speak.layer.borderColor = UIColor(hexString: ColorUtil.appBlue, alpha: 0.7)?.cgColor
+        btn_chinese.roundedButton(corner1: .topLeft, corner2: .bottomLeft)
+        btn_english.roundedButton(corner1: .topRight, corner2: .bottomRight)
         
         tableview.estimatedRowHeight = 100
         tableview.rowHeight = UITableViewAutomaticDimension
@@ -657,4 +663,9 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
         self.playType = 0
         self.resetData()
     }
+    
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        return itemInfo
+    }
+    
 }

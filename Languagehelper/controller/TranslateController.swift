@@ -11,9 +11,13 @@ import Alamofire
 import SwiftyJSON
 import Kanna
 import RealmSwift
+import AVFoundation
+import XLPagerTabStrip
 
-class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFlySpeechRecognizerDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, AVAudioPlayerDelegate {
+
+class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFlySpeechRecognizerDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, AVAudioPlayerDelegate, IndicatorInfoProvider {
     
+    var itemInfo: IndicatorInfo = IndicatorInfo(title: NSLocalizedString("Translate", comment: "translate"))
     let realm = try! Realm()
     var translates = try! Realm().objects(TranslateResultModel.self).sorted(byKeyPath: "creatTime",ascending: false)
     let headers: HTTPHeaders = [
@@ -52,22 +56,27 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
     }
     
     override func viewDidLoad() {
-        img_voice.isHidden = true
-        ed_input.delegate = self
-        ed_input.text = NSLocalizedString("Please input Chinese or English", comment: "input prompt")
-        ed_input.textColor = UIColor.lightGray
+        print("TranslateController---viewDidLoad")
+        super.viewDidLoad()
+        self.img_voice.isHidden = true
+        self.ed_input.delegate = self
+        self.ed_input.text = NSLocalizedString("Please input Chinese or English", comment: "input prompt")
+        self.ed_input.textColor = UIColor.lightGray
+
+        self.img_voice.layer.masksToBounds = true //没这句话它圆不起来
+        self.img_voice.layer.cornerRadius = 8.0 //设置图片圆角的尺度
+
+        self.btn_speak.layer.masksToBounds = true
+        self.btn_speak.layer.cornerRadius = 30.0
+        self.btn_speak.layer.borderWidth = 5.0
+        self.btn_speak.layer.borderColor = UIColor(hexString: ColorUtil.appBlue, alpha: 0.7)?.cgColor
+
+        self.btn_chinese.roundedButton(corner1: .topLeft, corner2: .bottomLeft)
+        self.btn_english.roundedButton(corner1: .topRight, corner2: .bottomRight)
         
-        img_voice.layer.masksToBounds = true //没这句话它圆不起来
-        img_voice.layer.cornerRadius = 8.0 //设置图片圆角的尺度
-        
-        btn_speak.layer.masksToBounds = true
-        btn_speak.layer.cornerRadius = 30.0
-        btn_speak.layer.borderWidth = 5.0
-        btn_speak.layer.borderColor = UIColor(hexString: ColorUtil.appBlue, alpha: 0.7)?.cgColor
-        
-        tableview.estimatedRowHeight = 100
-        tableview.rowHeight = UITableViewAutomaticDimension
-        
+        self.tableview.estimatedRowHeight = 100
+        self.tableview.rowHeight = UITableViewAutomaticDimension
+
         isSpeakEnglish = UserDefaults.standard.bool(forKey: KeyUtile.isSelectEnglish_TranKey)
         if isSpeakEnglish {
             onSelectedEnglish(sender: btn_english)
@@ -571,7 +580,7 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
         try! realm.write {
             realm.delete(self.translates[img.tag])
         }
-        tableview.reloadData()
+        self.tableview.reloadData()
     }
 
     //MARK: - IFlySpeechRecognizerDelegate
@@ -728,6 +737,10 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
         self.playType = 0
         self.resetData()
     }
+    
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        return itemInfo
+    }
 }
 
 extension UIButton {
@@ -740,6 +753,19 @@ extension UIButton {
         
         self.setBackgroundImage(colorImage, for: forState)
     }}
+
+extension UIButton{
+    func roundedButton(corner1:UIRectCorner, corner2:UIRectCorner){
+        let maskPAth1 = UIBezierPath(roundedRect: self.bounds,
+                                     byRoundingCorners: [corner1 , corner2],
+                                     cornerRadii:CGSize(width:20, height:20))
+        let maskLayer1 = CAShapeLayer()
+        maskLayer1.frame = self.bounds
+        maskLayer1.path = maskPAth1.cgPath
+        self.layer.mask = maskLayer1
+        
+    }
+}
 
 extension UILabel {
     

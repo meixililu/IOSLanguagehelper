@@ -79,7 +79,6 @@ class ResultParser {
             sbp += question + ","
             var isHasPronounce: Bool = false
             for link in doc.css("h2.wordbook-js > div.baav > span.pronounce") {
-                print("------")
                 sb += link.text!.removingWhitespaces()
                     .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                     .replacingOccurrences(
@@ -94,22 +93,24 @@ class ResultParser {
             }
             if let link = doc.css("div#phrsListTab > div.trans-container > ul").first {
                 for li in link.css("li"){
-                    let tem = li.text!.removingWhitespaces().trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                    let tem = li.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                         .replacingOccurrences(
                             of:
-                            "\n",
-                            with: " ")
+                            "\\s+",
+                            with: " ",
+                            options: .regularExpression)
                     sb += tem
                     sb += "\n"
                     sbp += tem + ","
                     
                 }
                 for li in link.css("p"){
-                    let tem = li.text!.removingWhitespaces().trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                    let tem = li.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                         .replacingOccurrences(
                             of:
-                            "\n",
-                            with: " ")
+                            "\\s+",
+                            with: " ",
+                            options: .regularExpression)
                     sb += tem
                     sb += "\n"
                     sbp += tem + ","
@@ -117,11 +118,12 @@ class ResultParser {
                 }
             }
             if let link = doc.css("div#phrsListTab > div.trans-container > p.additional").first {
-                let tem = link.text!.removingWhitespaces().trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                let tem = link.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                     .replacingOccurrences(
                         of:
-                        "\n",
-                        with: " ")
+                        "\\s+",
+                        with: " ",
+                        options: .regularExpression)
                 sb += tem
                 sb += "\n"
                 sbp += tem + ","
@@ -131,11 +133,12 @@ class ResultParser {
                 sb += "\n"
                 sb += "网络释义:"
                 sb += "\n"
-                let tem = link.text!.removingWhitespaces().trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                let tem = link.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                     .replacingOccurrences(
                         of:
-                        "\n",
-                        with: " ")
+                        "\\s+",
+                        with: " ",
+                        options: .regularExpression)
                 sb += tem
                 sb += "\n"
                 sbp += tem + ","
