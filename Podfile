@@ -11,6 +11,9 @@ pod 'SwiftyJSON'
 pod 'Kanna'
 pod 'RealmSwift'
 pod 'LeanCloud'
+pod 'KTVHTTPCache'
+pod 'MJRefresh'
+pod 'XLPagerTabStrip', '~> 8.0'
 end
 
 post_install do |installer|
