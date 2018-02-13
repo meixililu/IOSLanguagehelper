@@ -30,8 +30,8 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
         print("study-viewDidLoad")
         tableview.delegate = self
         tableview.dataSource = self
+        tableview.estimatedRowHeight = 80
         tableview.rowHeight = UITableViewAutomaticDimension
-        tableview.estimatedRowHeight = 60
         tableview.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10)
         tableview.separatorColor = UIColor(hexString: ColorUtil.line_light_gray, alpha: 0.7)
         header.setRefreshingTarget(self, refreshingAction: #selector(headerRefresh))
@@ -40,6 +40,10 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
         self.tableview.mj_footer = footer
         
         getDataTask();
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        FileManagerUtil.saveUserDefaults(2, key: KeyUtile.userLastPageIndex)
     }
     
     func headerRefresh(){
@@ -94,10 +98,16 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("didSelectRowAt:"+indexPath.description)
         self.tableview!.deselectRow(at: indexPath, animated: true)
-        let detailViewController = storyboard?.instantiateViewController(withIdentifier: "ReadingDetailController")
-//        self.navigationController!.pushViewController(detailViewController!, animated: true)
-        self.navigationController!.present(detailViewController!, animated: true, completion: nil)
-//        self.present(detailViewController!, animated: true, completion: nil)
+        let type = (self.newsList[indexPath.row].get(AVUtil.Reading.type)?.stringValue)!
+        if type == "video"{
+            let detailViewController = storyboard?.instantiateViewController(withIdentifier: "ReadingDetailVideoController") as! ReadingDetailVideoController
+            detailViewController.newsItem = self.newsList[indexPath.row]
+            self.navigationController!.present(detailViewController, animated: true, completion: nil)
+        }else{
+            let detailViewController = storyboard?.instantiateViewController(withIdentifier: "ReadingDetailController") as! ReadingDetailController
+            detailViewController.newsItem = self.newsList[indexPath.row]
+            self.navigationController!.pushViewController(detailViewController, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,12 +127,15 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         let url_str = (self.newsList[indexPath.row].get(AVUtil.Reading.img_url)?.stringValue)!
         let color_str = (self.newsList[indexPath.row].get(AVUtil.Reading.color_str)?.stringValue)!
-        cell.img.backgroundColor = ColorUtil.getRandomColorByStr(colorStr: color_str)
         let url = URL(string: url_str)
-        cell.img.kf.setImage(with: url)
+        cell.img.kf.setImage(with: url, placeholder: ColorUtil.getImageWithColor(ColorUtil.getRandomColorByStr(colorStr: color_str)))
         
         let type = (self.newsList[indexPath.row].get(AVUtil.Reading.type)?.stringValue)!
         if type == "mp3"{
+            cell.video_cover_height.constant = CGFloat(0)
+            cell.video_img_height.constant = CGFloat(0)
+            cell.video_play_img_height.constant = CGFloat(0)
+            
             cell.img_width.constant = CGFloat(90)
             cell.play_img.isHidden = false
             if let state = self.newsList[indexPath.row].get(AVUtil.Reading.play_status),
@@ -132,9 +145,19 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
                 cell.play_img.image = UIImage(named:"jz_play_normal")
             }
         }else if type == "video" {
+            cell.video_cover_height.constant = CGFloat(170)
+            cell.video_img_height.constant = CGFloat(170)
+            cell.video_play_img_height.constant = CGFloat(45)
+            
             cell.play_img.isHidden = true
             cell.img_width.constant = CGFloat(0)
+            cell.video_img.backgroundColor = ColorUtil.getRandomColorByStr(colorStr: color_str)
+            cell.video_img.kf.setImage(with: url)
         }else{
+            cell.video_cover_height.constant = CGFloat(0)
+            cell.video_img_height.constant = CGFloat(0)
+            cell.video_play_img_height.constant = CGFloat(0)
+            
             cell.play_img.isHidden = true
             cell.img_width.constant = CGFloat(90)
         }

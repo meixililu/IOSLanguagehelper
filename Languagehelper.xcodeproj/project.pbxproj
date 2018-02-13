@@ -48,10 +48,11 @@
 		A1A7B36F1D4A616F0072AAD2 /* DictionaryResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A7B36E1D4A616F0072AAD2 /* DictionaryResultModel.swift */; };
 		A1A7B3711D4B3F550072AAD2 /* KeyUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A7B3701D4B3F550072AAD2 /* KeyUtil.swift */; };
 		A1C39C551EA34C5300865E0D /* StudyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C39C541EA34C5300865E0D /* StudyController.swift */; };
-		A1E8AE022021F1AB00AFD66C /* ReadingDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E8AE012021F1AB00AFD66C /* ReadingDetailController.swift */; };
+		A1E8AE022021F1AB00AFD66C /* ReadingDetailVideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E8AE012021F1AB00AFD66C /* ReadingDetailVideoController.swift */; };
 		A1E8AE062022D53200AFD66C /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E8AE052022D53200AFD66C /* MainNavigationController.swift */; };
 		A1E8AE08202307ED00AFD66C /* JokePagerTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E8AE07202307ED00AFD66C /* JokePagerTabController.swift */; };
 		A1E8AE0B2024BA4F00AFD66C /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E8AE0A2024BA4F00AFD66C /* PaddingLabel.swift */; };
+		A1E8AE0D202C2B4400AFD66C /* ReadingDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E8AE0C202C2B4400AFD66C /* ReadingDetailController.swift */; };
 		A1FB3C6D1E5D830B00B20156 /* SwiftPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1FB3C6C1E5D830B00B20156 /* SwiftPages.swift */; };
 /* End PBXBuildFile section */
 
@@ -130,10 +131,11 @@
 		A1A7B3701D4B3F550072AAD2 /* KeyUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyUtil.swift; sourceTree = "<group>"; };
 		A1C39C541EA34C5300865E0D /* StudyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudyController.swift; sourceTree = "<group>"; };
 		A1DC49DA1D5E1546003842A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
-		A1E8AE012021F1AB00AFD66C /* ReadingDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingDetailController.swift; sourceTree = "<group>"; };
+		A1E8AE012021F1AB00AFD66C /* ReadingDetailVideoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingDetailVideoController.swift; sourceTree = "<group>"; };
 		A1E8AE052022D53200AFD66C /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		A1E8AE07202307ED00AFD66C /* JokePagerTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JokePagerTabController.swift; sourceTree = "<group>"; };
 		A1E8AE0A2024BA4F00AFD66C /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		A1E8AE0C202C2B4400AFD66C /* ReadingDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingDetailController.swift; sourceTree = "<group>"; };
 		A1FB3C6C1E5D830B00B20156 /* SwiftPages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftPages.swift; sourceTree = "<group>"; };
 		BD5496D24886E45E3E0426A3 /* Pods-Languagehelper.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Languagehelper.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Languagehelper/Pods-Languagehelper.debug.xcconfig"; sourceTree = "<group>"; };
 		FC47D3797099E82A894521C8 /* Pods-Languagehelper.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Languagehelper.release.xcconfig"; path = "Pods/Target Support Files/Pods-Languagehelper/Pods-Languagehelper.release.xcconfig"; sourceTree = "<group>"; };
@@ -311,7 +313,8 @@
 				A1151D0F1D621EB8003772A9 /* SettingController.swift */,
 				A1C39C541EA34C5300865E0D /* StudyController.swift */,
 				A1A7B36C1D4717AD0072AAD2 /* DictionaryController.swift */,
-				A1E8AE012021F1AB00AFD66C /* ReadingDetailController.swift */,
+				A1E8AE012021F1AB00AFD66C /* ReadingDetailVideoController.swift */,
+				A1E8AE0C202C2B4400AFD66C /* ReadingDetailController.swift */,
 				A1E8AE052022D53200AFD66C /* MainNavigationController.swift */,
 				A1E8AE07202307ED00AFD66C /* JokePagerTabController.swift */,
 			);
@@ -583,7 +586,7 @@
 				A1299EF61D3B622700FF4378 /* SwiftNotice.swift in Sources */,
 				A19D4E391D2C14B900B1A973 /* TranslateResultModel.swift in Sources */,
 				A1C39C551EA34C5300865E0D /* StudyController.swift in Sources */,
-				A1E8AE022021F1AB00AFD66C /* ReadingDetailController.swift in Sources */,
+				A1E8AE022021F1AB00AFD66C /* ReadingDetailVideoController.swift in Sources */,
 				A1299EFA1D3D296800FF4378 /* ColorUtil.swift in Sources */,
 				A1151D101D621EB8003772A9 /* SettingController.swift in Sources */,
 				A12E6EBF200C5A1600576415 /* AVUtil.swift in Sources */,
@@ -591,6 +594,7 @@
 				A11559CD1D27B3280050603D /* TranslateController.swift in Sources */,
 				A1A7B36D1D4717AD0072AAD2 /* DictionaryController.swift in Sources */,
 				A1299EF01D2E1D0400FF4378 /* XFUtil.swift in Sources */,
+				A1E8AE0D202C2B4400AFD66C /* ReadingDetailController.swift in Sources */,
 				A11679831D13AA4D00EDD03B /* MainViewController.swift in Sources */,
 				A1299EF81D3D28EF00FF4378 /* SwiftHEXColors.swift in Sources */,
 				A1155A0D1D2A265E0050603D /* Utile.swift in Sources */,

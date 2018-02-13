@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var error: NSError?
         KTVHTTPCache.proxyStart(&error)
         
-        Thread.sleep(forTimeInterval: 1.0)
+//        Thread.sleep(forTimeInterval: 1.0)
         return true
     }
 
@@ -62,6 +62,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                realm.delete(dics)
 //            }
 //        }
+        print("applicationWillTerminate")
+        print(MainViewController.pageindex.description)
     }
 
 }

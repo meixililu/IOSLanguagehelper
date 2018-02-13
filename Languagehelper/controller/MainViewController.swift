@@ -11,6 +11,7 @@ import XLPagerTabStrip
 
 class MainViewController: ButtonBarPagerTabStripViewController{
     
+    static var pageindex:Int = 0
     var isReload = false
     
     override var prefersStatusBarHidden: Bool {
@@ -40,7 +41,7 @@ class MainViewController: ButtonBarPagerTabStripViewController{
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.moveToViewController(at: 2)
+        self.moveToViewController(at: UserDefaults.standard.integer(forKey: KeyUtile.userLastPageIndex))
     }
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {

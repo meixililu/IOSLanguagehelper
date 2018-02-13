@@ -102,4 +102,11 @@ class FileManagerUtil {
         userDafault.set(object, forKey: key)
         userDafault.synchronize()
     }
+    
+    class func saveUserDefaults(_ object:String, key:String){
+        let userDafault = UserDefaults.standard
+        userDafault.set(object, forKey: key)
+        userDafault.synchronize()
+    }
+    
 }

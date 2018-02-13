@@ -118,6 +118,7 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
     
     override func viewDidAppear(_ animated: Bool) {
         print("tran-viewDidAppear")
+        FileManagerUtil.saveUserDefaults(0, key: KeyUtile.userLastPageIndex)
         if inNeedRefreshData {
             translates = try! Realm().objects(TranslateResultModel.self).sorted(byProperty: "creatTime",ascending: false)
             self.tableview.reloadData()
@@ -174,7 +175,7 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
         btn_chinese.setTitleColor(UIColor(hexString: ColorUtil.darkGray6), for: UIControlState.normal)
         btn_english.backgroundColor = UIColor(hexString: ColorUtil.appBlue, alpha: 0.85)
         btn_english.setTitleColor(UIColor.white, for: UIControlState.normal)
-        FileManagerUtil.saveUserDefaults(true, key: KeyUtile.isSelectEnglish_TranKey)
+        FileManagerUtil.saveUserDefaults(true,  key: KeyUtile.isSelectEnglish_TranKey)
     }
     
     func translateBaidu(){

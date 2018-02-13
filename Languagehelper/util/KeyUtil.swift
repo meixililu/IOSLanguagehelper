@@ -21,6 +21,8 @@ class KeyUtile {
     static let autoPlay = "autoPlay"
     
     static let autoClear = "autoClear"
+    
+    static let userLastPageIndex = "userLastPageIndex"
 
     
 }

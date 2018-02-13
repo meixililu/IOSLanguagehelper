@@ -87,6 +87,7 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        FileManagerUtil.saveUserDefaults(1, key: KeyUtile.userLastPageIndex)
         if inNeedRefreshData {
             translates = try! realm.objects(DictionaryResultModel.self).sorted(byProperty: "creatTime",ascending: false)
             self.tableview.reloadData()
