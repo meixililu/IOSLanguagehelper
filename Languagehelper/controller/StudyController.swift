@@ -19,10 +19,9 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
     var itemInfo: IndicatorInfo = IndicatorInfo(title: NSLocalizedString("Read", comment: "read"))
     @IBOutlet weak var tableview: UITableView!
     var newsList = Array<LCObject>()
-    var player: AVPlayer?
     let header = MJRefreshNormalHeader()
     let footer = MJRefreshAutoNormalFooter()
-    var limit = 15
+    var limit = 10
     var skip = 0
     
     override func viewDidLoad() {
@@ -42,17 +41,22 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
         getDataTask();
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if PlayerService.status == "1"{
+            self.tableview.reloadData()
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         FileManagerUtil.saveUserDefaults(2, key: KeyUtile.userLastPageIndex)
     }
     
     func headerRefresh(){
-        print("headerRefresh")
-        skip = 0
+        skip = Int(arc4random_uniform(5000))
+        self.newsList.removeAll()
         getDataTask()
     }
     func footerRefresh(){
-        print("footerRefresh")
         getDataTask()
     }
 
@@ -64,9 +68,6 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
            query.find { result in
             switch result {
             case .success(let objects):
-                if self.skip == 0 {
-                    self.newsList.removeAll()
-                }
                 for obg in objects{
                     obg.set(AVUtil.Reading.color_str, value: ColorUtil.getRandomColorStr())
                 }
@@ -88,15 +89,14 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("didEndDisplaying:"+indexPath.description)
+//        print("didEndDisplaying:"+indexPath.description)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("willDisplay:"+indexPath.description)
+//        print("willDisplay:"+indexPath.description)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("didSelectRowAt:"+indexPath.description)
         self.tableview!.deselectRow(at: indexPath, animated: true)
         let type = (self.newsList[indexPath.row].get(AVUtil.Reading.type)?.stringValue)!
         if type == "video"{
@@ -116,21 +116,22 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "newscell", for: indexPath as IndexPath) as! ReadingTableViewCell
-        cell.title.text = (self.newsList[indexPath.row].get(AVUtil.Reading.title)?.stringValue)!
-        let source = (self.newsList[indexPath.row].get(AVUtil.Reading.source_name)?.stringValue)!
-        let type_name = (self.newsList[indexPath.row].get(AVUtil.Reading.type_name)?.stringValue)!
+        let item = self.newsList[indexPath.row]
+        cell.title.text = (item.get(AVUtil.Reading.title)?.stringValue)!
+        let source = (item.get(AVUtil.Reading.source_name)?.stringValue)!
+        let type_name = (item.get(AVUtil.Reading.type_name)?.stringValue)!
         if source.isEmpty {
             cell.source.text = type_name
         }else{
             cell.source.text = source + "       " + type_name
         }
         
-        let url_str = (self.newsList[indexPath.row].get(AVUtil.Reading.img_url)?.stringValue)!
-        let color_str = (self.newsList[indexPath.row].get(AVUtil.Reading.color_str)?.stringValue)!
+        let url_str = (item.get(AVUtil.Reading.img_url)?.stringValue)!
+        let color_str = (item.get(AVUtil.Reading.color_str)?.stringValue)!
         let url = URL(string: url_str)
         cell.img.kf.setImage(with: url, placeholder: ColorUtil.getImageWithColor(ColorUtil.getRandomColorByStr(colorStr: color_str)))
         
-        let type = (self.newsList[indexPath.row].get(AVUtil.Reading.type)?.stringValue)!
+        let type = (item.get(AVUtil.Reading.type)?.stringValue)!
         if type == "mp3"{
             cell.video_cover_height.constant = CGFloat(0)
             cell.video_img_height.constant = CGFloat(0)
@@ -138,9 +139,13 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
             
             cell.img_width.constant = CGFloat(90)
             cell.play_img.isHidden = false
-            if let state = self.newsList[indexPath.row].get(AVUtil.Reading.play_status),
-                state.stringValue == "1" {
-                cell.play_img.image = UIImage(named:"jz_pause_normal")
+            if PlayerService.status == "1"{
+                if let itemId = item.get(AVUtil.Reading.objectId),
+                    itemId.stringValue == PlayerService.lastPlayItem{
+                    cell.play_img.image = UIImage(named:"jz_pause_normal")
+                }else{
+                    cell.play_img.image = UIImage(named:"jz_play_normal")
+                }
             }else{
                 cell.play_img.image = UIImage(named:"jz_play_normal")
             }
@@ -161,10 +166,10 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
             cell.play_img.isHidden = true
             cell.img_width.constant = CGFloat(90)
         }
-        let tap_share:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StudyController.play_img_click(sender:)))
+        let tap_play:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StudyController.play_img_click(sender:)))
         cell.play_img.tag = indexPath.row
         cell.play_img.isUserInteractionEnabled = true
-        cell.play_img.addGestureRecognizer(tap_share)
+        cell.play_img.addGestureRecognizer(tap_play)
         
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
@@ -173,54 +178,8 @@ class StudyController: UIViewController, UITableViewDataSource, UITableViewDeleg
     
     func play_img_click(sender:UITapGestureRecognizer){
         let img = sender.view as! UIImageView
-        let mp3Url = (self.newsList[img.tag].get(AVUtil.Reading.media_url)?.stringValue)!
-        if (player != nil),(player?.isPlaying)!{
-            if let status = self.newsList[img.tag].get(AVUtil.Reading.play_status),
-            status.stringValue == "1" {
-                player?.pause()
-                self.newsList[img.tag].set(AVUtil.Reading.play_status, value: "3")
-                self.tableview.reloadData()
-            }else{
-                clearPlaySign()
-                self.newsList[img.tag].set(AVUtil.Reading.play_status, value: "1")
-                playMp3(mp3_url: mp3Url)
-            }
-        }else{
-            if let status = self.newsList[img.tag].get(AVUtil.Reading.play_status),
-                status.stringValue == "3",(player != nil) {
-                player!.play()
-                self.newsList[img.tag].set(AVUtil.Reading.play_status, value: "1")
-                self.tableview.reloadData()
-            }else{
-                self.newsList[img.tag].set(AVUtil.Reading.play_status, value: "1")
-                playMp3(mp3_url: mp3Url)
-            }
-        }
-    }
-    
-    func playMp3(mp3_url: String) -> Void {
-        print(mp3_url)
-        let url_string = KTVHTTPCache.proxyURLString(withOriginalURLString: mp3_url)
-        let Mp3Url = URL(string: url_string!)
-        player = AVPlayer(url: Mp3Url!)
-        NotificationCenter.default.addObserver(self,
-            selector: #selector(playerDidFinishPlaying),
-            name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-            object: player?.currentItem)
-        player!.play()
+        PlayerService.playMp3(item: self.newsList[img.tag])
         self.tableview.reloadData()
-    }
-    
-    func playerDidFinishPlaying(note: NSNotification) {
-        print("Video Finished")
-        clearPlaySign()
-        self.tableview.reloadData()
-    }
-
-    func clearPlaySign(){
-        for object in self.newsList{
-            object.set(AVUtil.Reading.play_status, value: "0")
-        }
     }
 
     override func didReceiveMemoryWarning() {

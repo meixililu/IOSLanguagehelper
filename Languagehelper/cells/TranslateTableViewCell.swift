@@ -16,6 +16,7 @@ class TranslateTableViewCell: UITableViewCell {
     @IBOutlet var btn_copy: UIImageView!
     @IBOutlet var btn_collect: UIImageView!
     @IBOutlet var btn_delete: UIImageView!
+    @IBOutlet weak var btn_practice: UIImageView!
     
 }
 

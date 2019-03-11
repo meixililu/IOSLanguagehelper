@@ -190,7 +190,6 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
                     let json = JSON(resutl)
                     if let dst: String = json["trans_result",0,"dst"].string {
                         self.result = dst
-                        self.ed_input.text = nil
                         self.textViewDidEndEditing(self.ed_input)
                     } else{
                         self.noticeTop(NSLocalizedString("Translate fail,please retry later!", comment: "error"), autoClear: true)
@@ -220,7 +219,6 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
                     if json["status"].int == 0{
                         if let temp = json["content"].string{
                             self.result = temp
-                            self.ed_input.text = nil
                             self.textViewDidEndEditing(self.ed_input)
                             let resultModel = TranslateResultModel()
                             self.setData(resultModel: resultModel)
@@ -255,7 +253,6 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
                     if status == 0 {//dic
                         if json["content","word_mean"].array != nil {
                             self.getIcibaiNewRusult(json: json,resultModel: resultModel)
-                            self.ed_input.text = nil
                             self.textViewDidEndEditing(self.ed_input)
                         }else{
                             self.translateHjApi()
@@ -263,7 +260,6 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
                     } else if status == 1 {//tran
                         if let out: String = json["content","out"].string {
                             resultModel.result = out.replacingOccurrences(of:"<br/>", with: "")
-                            self.ed_input.text = nil
                             self.textViewDidEndEditing(self.ed_input)
                         }else{
                             self.translateHjApi()
@@ -298,6 +294,9 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
         
         if UserDefaults.standard.bool(forKey: KeyUtile.autoPlay) {
             self.playResultData(index: 0)
+        }
+        if UserDefaults.standard.bool(forKey: KeyUtile.autoClear) {
+            self.ed_input.text = nil
         }
     }
     
@@ -417,12 +416,24 @@ class TranslateController: UIViewController, IFlySpeechSynthesizerDelegate, IFly
         cell.btn_collect.isUserInteractionEnabled = true
         cell.btn_collect.addGestureRecognizer(tap_collect)
         
+        let tap_practice:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(TranslateController.toPracticePage(sender:)))
+        cell.btn_practice.tag = indexPath.row
+        cell.btn_practice.isUserInteractionEnabled = true
+        cell.btn_practice.addGestureRecognizer(tap_practice)
+        
         let tap_delete:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(TranslateController.delete_btn_click(sender:)))
         cell.btn_delete.tag = indexPath.row
         cell.btn_delete.isUserInteractionEnabled = true
         cell.btn_delete.addGestureRecognizer(tap_delete)
         
         return cell
+    }
+    
+    func toPracticePage(sender:UITapGestureRecognizer){
+        let img = sender.view as! UIImageView
+        let mPracticeController = storyboard?.instantiateViewController(withIdentifier: "PracticeController") as! PracticeController
+        mPracticeController.item = self.translates[img.tag]
+        self.navigationController!.pushViewController(mPracticeController, animated: true)
     }
     
     func resultClick(sender:UITapGestureRecognizer){

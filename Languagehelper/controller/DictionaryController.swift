@@ -160,7 +160,6 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
                     if let dst: String = json["trans_result",0,"dst"].string {
                         print("value1:\(dst)")
                         self.result = dst
-                        self.ed_input.text = nil
                         self.textViewDidEndEditing(self.ed_input)
                     } else{
                         self.noticeTop(NSLocalizedString("Translate fail,please retry later!", comment: "error"), autoClear: true)
@@ -194,7 +193,6 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
                     if status == 0 {//dic
                         if json["content","word_mean"].array != nil {
                             ResultParser.getIcibaiNewRusult(json,resultModel: resultModel)
-                            self.ed_input.text = nil
                             self.textViewDidEndEditing(self.ed_input)
                         }else{
                             self.translateBaidu()
@@ -202,7 +200,6 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
                     } else if status == 1 {//tran
                         if let out: String = json["content","out"].string {
                             resultModel.result = out.replacingOccurrences(of: "<br/>", with: "")
-                            self.ed_input.text = nil
                             self.textViewDidEndEditing(self.ed_input)
                         }else{
                             self.translateBaidu()
@@ -238,6 +235,9 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
         if UserDefaults.standard.bool(forKey: KeyUtile.autoPlay) {
             self.playResultData(0)
         }
+        if UserDefaults.standard.bool(forKey: KeyUtile.autoClear) {
+            self.ed_input.text = nil
+        }
     }
     
     func Translate_youdao_web(){
@@ -250,7 +250,6 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
                 let resultModel = DictionaryResultModel()
                 if (response.result.value != nil) {
                     ResultParser.parseYoudaoWeb(response.result.value!, question: self.question, resultModel: resultModel)
-                    self.ed_input.text = nil
                     self.textViewDidEndEditing(self.ed_input)
                 }else {
                     self.Translate_biying_web()
@@ -269,7 +268,6 @@ class DictionaryController: UIViewController, IFlySpeechSynthesizerDelegate, IFl
                 let resultModel = DictionaryResultModel()
                 if (response.result.value != nil) {
                     ResultParser.parseBiyingWeb(response.result.value!, question: self.question, resultModel: resultModel)
-                    self.ed_input.text = nil
                     self.textViewDidEndEditing(self.ed_input)
                 }else {
                     

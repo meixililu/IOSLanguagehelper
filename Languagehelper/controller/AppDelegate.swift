@@ -28,8 +28,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var error: NSError?
         KTVHTTPCache.proxyStart(&error)
         
-//        Thread.sleep(forTimeInterval: 1.0)
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setActive(true)
+            try session.setCategory(AVAudioSessionCategoryPlayback)
+        } catch {
+            print(error)
+        }
+        registerDefaultsValue()
         return true
+    }
+    
+    func registerDefaultsValue(){
+        UserDefaults.standard.register(defaults: [KeyUtile.autoClear : true])
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -62,8 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                realm.delete(dics)
 //            }
 //        }
-        print("applicationWillTerminate")
-        print(MainViewController.pageindex.description)
+        
     }
 
 }

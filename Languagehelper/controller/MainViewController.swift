@@ -49,7 +49,8 @@ class MainViewController: ButtonBarPagerTabStripViewController{
         let child_tran = storyboard?.instantiateViewController(withIdentifier: "TranslateController")
         let child_dic = storyboard?.instantiateViewController(withIdentifier: "DictionaryController")
         let child_reading = storyboard?.instantiateViewController(withIdentifier: "StudyController")
-        return [child_tran!, child_dic!, child_reading!]
+        let child_leisure = storyboard?.instantiateViewController(withIdentifier: "LeisureController")
+        return [child_tran!, child_dic!, child_reading!, child_leisure!]
     }
     
 }

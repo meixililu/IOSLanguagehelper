@@ -18,7 +18,10 @@
 "Tuf-An-JWu.text" = "";
 
 /* Class = "UILabel"; text = "Auto play after Translate"; ObjectID = "aXD-gH-41F"; */
-"aXD-gH-41F.text" = "翻译之后自动播放";
+"aXD-gH-41F.text" = "自动播放翻译结果";
+
+/* Class = "UILabel"; text = "Auto play after Translate"; ObjectID = "k28-5V-J8O"; */
+"k28-5V-J8O.text" = "自动清空输入框";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "cwq-Tp-qn9"; */
 "cwq-Tp-qn9.text" = "";

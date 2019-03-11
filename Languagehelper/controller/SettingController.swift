@@ -12,18 +12,24 @@ import RealmSwift
 class SettingController: UIViewController {
 
     let realm = try! Realm()
-    @IBOutlet var sw_auto_play: UISwitch!
+    @IBOutlet weak var sw_auto_play: UISwitch!
+    @IBOutlet weak var sw_auto_clear: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let autoPlay = UserDefaults.standard.bool(forKey: KeyUtile.autoPlay)
+        let autoClear = UserDefaults.standard.bool(forKey: KeyUtile.autoClear)
         sw_auto_play.setOn(autoPlay, animated: true)
+        sw_auto_clear.setOn(autoClear, animated: true)
     }
     
     @IBAction func onAutoPlaySwitchChange(_ sender: AnyObject) {
         FileManagerUtil.saveUserDefaults(sender.isOn, key: KeyUtile.autoPlay)
     }
 
+    @IBAction func onAutoClear(_ sender: AnyObject) {
+        FileManagerUtil.saveUserDefaults(sender.isOn, key: KeyUtile.autoClear)
+    }
     
     @IBAction func clear_all_record(_ sender: AnyObject) {
         let alertController = UIAlertController(title: NSLocalizedString("kindly reminder", comment: "kindly reminder"),message: NSLocalizedString("Are you sure to delete", comment: "delete prompt"), preferredStyle: .alert)

@@ -26,6 +26,7 @@ class AVUtil {
         static let img_urls = "img_urls"
         static let color_str = "color_str"
         static let play_status = "play_status"
+        static let objectId = "objectId"
     }
     
     
